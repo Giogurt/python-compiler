@@ -6,6 +6,15 @@ def main():
     program_file = read_txt_file()
     scanner = Scanner()
     scanner.scan_file(program_file, table)
+    i = scanner.get_ids()
+    n = scanner.get_nums()
+
+    print('Identifiers')
+    for x in range(len(i)):
+        print(x, '|', i[x])
+    print('\n', 'Numbers')
+    for x in range(len(n)):
+        print(x, '|', n[x])    
     
 
 if __name__ == '__main__':
