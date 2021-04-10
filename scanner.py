@@ -22,6 +22,27 @@ class Scanner:
     def get_nums(self):
         return self.nums_table
 
+    def error_handler(self, err_state):
+        msg = 'ERROR: '
+        switcher={
+            72: msg + 'INVALID CHARACTER',
+            73: msg + 'COMMENT NEVER ENDS',
+            74: msg + '! NEEDS TO BE FOLLOWED BY A =',
+            75: msg + 'IDS CANNOT CONTAIN DIGITS',
+            76: msg + 'NUMS CANNOT CONTAIN LETTERS',
+            77: msg + 'REACHED END OF FILE PREMATURELY'
+        }
+        return switcher.get(err_state, "UNKNOWN ERROR")
+    def error_handler_end(self, err_state):
+        msg = 'ERROR: '
+        switcher={
+            53: msg + 'COMMENT NEVER ENDS',
+            54: msg + 'COMMENT NEVER ENDS',
+        }
+        err_msg = switcher.get(err_state, 'REACHED END OF FILE PREMATURELY')
+        print(err_msg)
+        exit()
+
     def append_char(self, symbol):
         if(re.search('\S', symbol)):
             if(re.search('\+|\-|\*|\/|<|=|>|\,|;|\(|\)|\[|\]|\{|\}|\!', symbol)):
@@ -64,7 +85,7 @@ class Scanner:
                 # else:
                 # self.state=T[self.state][symbol]
 
-            if(T[self.state]['e'] == 'E' or T[self.state]['e'] == 'A'):
+            if(T[self.state]['e'] == 'A'):
                 # print('entre a aceptar')
                 if (self.temp_string != ''):
                     self.ids_table.append(self.temp_string)
@@ -77,6 +98,11 @@ class Scanner:
                 self.append_char(symbol)
 
                 self.state = 0
+            # ERROR WAS DETECTED
+            elif(T[self.state]['e'] == 'E'):
+                msg = self.error_handler(self.state)
+                print(msg)
+                exit()
 
             # if(re.search('\S', symbol)):
             #     if(re.search('\+|\-|\*|\/|<|=|>|\,|\(|\)|\[|\]|\{|\}|\!', symbol)):
@@ -85,14 +111,18 @@ class Scanner:
             #     else:
             #         if(self.state < 45):
             #             self.temp_string += symbol
-        if(T[self.state]['e'] != 'E' and T[self.state]['e'] != 'A'):
-            #error end of file
-            pass
-        else:
+        # if(T[self.state]['e'] != 'E' and T[self.state]['e'] != 'A'):
+        if(self.state != 0):
+            # print(self.state)
+            self.error_handler_end(self.state)
+        # else:
+            # msg = self.error_handler(77)
+            # print(msg)
+            # exit()
             # print('entre al final')
-            if (self.temp_string != ''):
-                self.ids_table.append(self.temp_string)
-            if (self.temp_num != ''):
-                self.nums_table.append(self.temp_num)
+            # if (self.temp_string != ''):
+            #     self.ids_table.append(self.temp_string)
+            # if (self.temp_num != ''):
+            #     self.nums_table.append(self.temp_num)
         # print(self.ids_table)
         # print(self.nums_table)
