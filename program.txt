@@ -1,5 +1,5 @@
-/* A program to perform selection sort on a 10 
-element array */
+/* h */
+
 int x[10];
 
 int miniloc(int a[], int low, int high){

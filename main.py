@@ -8,6 +8,7 @@ def main():
     scanner.scan_file(program_file, table)
     i = scanner.get_ids()
     n = scanner.get_nums()
+    t = scanner.get_tokens()
 
     print('Identifiers')
     for x in range(len(i)):
@@ -15,7 +16,9 @@ def main():
     print('\n', 'Numbers')
     for x in range(len(n)):
         print(x, '|', n[x])    
-    
+    print('\n', 'Tokens')
+    for x in t:
+        print(x)
 
 if __name__ == '__main__':
     main()
