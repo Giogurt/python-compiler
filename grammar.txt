@@ -1,0 +1,36 @@
+    1. declaration_list = declaration declaration_list’
+    2. declaration_list’ = declaration declaration_list’ | ε
+    3. declaration = var_declaration | fun_declaration
+    4. var_declaration = int ID var_declaration’
+    5. var_declaration’ = ; | [ NUM ] ;
+    6. type_specifier = int | void
+    7. fun_declaration = type_specifier ID ( params ) compound_stmt
+    8. params = param_list | void
+    9. param_list = param param_list’
+    10. param_list’ = , param param_list’ | ε
+    11. param = int ID param’
+    12. param’ = [] | ε
+    13. compound_stmt  = { local_declarations  statement_list  }
+    14. local_declarations = var_declaration local_declarations | ε 
+    15. statement_list = statement statement_list'
+    16. statement_list' = statement | ε
+    17. statement = var = expression ; | call ; | compound _stmt  | if  ( expression ) statement selection _stmt_else  | while  ( expression )  statement  | return return_stmt’  | input var ; | output output_stmt’ 
+    18. selection _stmt_else =  else statement | ε
+    19. return_stmt’ = ; | expression ;
+    20. output_stmt’ = expression ; | var ;
+    21. var = ID var’
+    22. var’ = [ aritmetic_expression ] | ε
+    23. expression = arithmetic_expression expression’
+    24. expression’ = relop arithmetic_expression | ε
+    25. relop = <= | < | > | >= | == | !=
+    26. arithmetic_expression = term arithmetic_expression’
+    27. arithmetic_expression’ = addop term arithmetic_expression’ | ε
+    28. addop = + | -
+    29. term = factor term’
+    30. term’ = mulop factor term’ | ε
+    31. mulop = * | /
+    32. factor = ( arithmetic_expression )  | var | call | NUM
+    33. call  = ID ( args )
+    34. args = args_list | ε
+    35. args_list = arithmetic_expression args_list’
+    36. args_list’ = , arithmetic_expression args_list’ | ε

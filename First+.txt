@@ -1,0 +1,71 @@
+First+(declaration_list = declaration declaration_list’) = { int, void }
+First+(declaration_list’ = declaration declaration_list’) = { int, void }
+First+(declaration_list’ = ε) = { $, ε }
+First+(declaration = var_declaration) = { int }
+First+(declaration = fun_declaration) = { int, void }
+First+(var_declaration = int ID var_declaration’) = { int }
+First+(var_declaration’ = ;) = { ; }
+First+(var_declaration’ = [ NUM ] ;) = { [ }
+First+(type_specifier = void) = { int }
+First+(type_specifier = void) = { void }
+First+(fun_declaration = type_specifier ID ( params ) compound_stmt) = { int, void }
+First+(params = param_list) = { int }
+First+(params = void) = { void }
+First+(param_list = param param_list’) = { int }
+First+(param_list’ = , param param_list’) = { , }
+First+(param_list’ = ε) = { ), ε }
+First+(param = int ID param’) = { int }
+First+(param’ = []) = { [ }
+First+(param’ = ε) = {,, ), ε }
+First+(compound_stmt  = { local_declarations  statement_list }) = { { }
+First+(local_declarations = var_declaration local_declarations) = { int }
+First+(local_declarations = ε) = { ID,  {, if, while, return, input, output, ε }
+First+(statement_list = statement statement_list') = { ID,  {, if, while, return, input, output }
+First+(statement_list' = statement) = { ID,  {, if, while, return, input, output }
+First+(statement_list' = ε) = { }, ε }
+First+(statement = var = expression ;) = { ID }
+First+(statement = call ;) = { ID }
+First+(statement = compound _stmt) = { { }
+First+(statement = if  ( expression ) statement selection _stmt_else) = { if }
+First+(statement = while  ( expression )  statement) = { while }
+First+(statement = return return_stmt’) = { return }
+First+(statement = input var ;) = { input }
+First+(statement = output output_stmt’) = { output }
+First+(selection _stmt_else = else statement) = else
+First+(selection _stmt_else = ε) = { ID,  {, if, while, return, input, output, }, else, ε }
+First+(return_stmt’ = ;) = { ; }
+First+(return_stmt’ = expression ;) = { (, ID, NUM }
+First+(output_stmt’ = expression ;) = { (, ID, NUM }
+First+(output_stmt’ = var ;) = { ID }
+First+(var = ID var’) = { ID }
+First+(var’ = [ aritmetic_expression ]) = { [ }
+First+(var’ = ε) = { *, / , +, -, <=, <, >, >=, ==, !=, ;, ), ,, ε }
+First+(expression = arithmetic_expression expression’) = { (, ID, NUM }
+First+(expression’ = relop arithmetic_expression) = { <=, <, >, >=, ==, != }
+First+(expression’ = ε) = { ;, ), ε }
+First+(relop = <=) = { <= }
+First+(relop = <) = { < }
+First+(relop = >) = { > }
+First+(relop = >=) = { >= }
+First+(relop = ==) = { == }
+First+(relop = !=) = { != }
+First+(arithmetic_expression = term arithmetic_expression’) = { (, ID, NUM }
+First+(arithmetic_expression’ = addop term arithmetic_expression’) = { +, - }
+First+(arithmetic_expression’ = ε) = { <=, <, >, >=, ==, !=, ;, ), ,, ε }
+First(addop = +) = { + }
+First(addop = -) = { - }
+First+(term = factor term’) = { (, ID, NUM }
+First+(term’ = mulop factor term’) = { *, / }
+First+(term’ = ε) = { +, -, <=, <, >, >=, ==, !=, ;, ), ,, ε }
+First+(mulop = *) = { * }
+First+(mulop = /) = { / }
+First+(factor = ( arithmetic_expression )) = { ( }
+First+(factor = var) = { ID }
+First+(factor = call) = { ID }
+First+(factor = NUM) = { NUM }
+First+(call  = ID ( args )) = { ID }
+First+(args = args_list) = { (, ID, NUM }
+First+(args = ε) = { ), ε }
+First+(args_list = arithmetic_expression args_list’) = { (, ID, NUM }
+First+(args_list’ = , arithmetic_expression args_list’) = { , }
+First+(args_list’ = ε) = { ), ε }
