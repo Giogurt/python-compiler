@@ -164,7 +164,7 @@ class Scanner:
                     self.temp_string = ''
                 if (self.temp_num != ''):
                     self.add_num()
-                    self.nums_table.append(self.temp_num)
+                    # self.nums_table.append(self.temp_num)
                     self.temp_num = ''
                 if (self.temp_del != ''):
                     self.add_del()

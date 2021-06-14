@@ -6,6 +6,7 @@ class Parser:
         self.current_token = tokens[0]
         self.token_value = ""
         self.token_pos = 0
+        self.call_flag = False
         self.res_list = ["err", "else", "if", "int", "return",
                          "void", "while", "input", "output"]
         self.del_list = [
@@ -14,7 +15,7 @@ class Parser:
         self.tokens.append(["del", "$"])
 
     def get_current_token(self):
-        return self.current_token
+        return self.token_value
 
     def error(self):
         print("IMPLEMENTAR ERROR BIEN")
@@ -25,10 +26,13 @@ class Parser:
         if (self.current_token[0] == "res"):
             value = self.res_list[self.current_token[1]]
         elif (self.current_token[0] == "del"):
-            value = self.del_list[self.current_token[1]]
+            if(self.current_token[1] == "$"):
+                value = "$"
+            else:
+                value = self.del_list[self.current_token[1]]
         elif (self.current_token[0] == "id"):
             value = self.ids[self.current_token[1]]
-        elif (self.current_token[0] == "nums"):
+        elif (self.current_token[0] == "num"):
             value = self.nums[self.current_token[1]]
         else:
             print("UNRECOGNIZED TOKEN TYPE")
@@ -38,7 +42,7 @@ class Parser:
     def match(self, terminal):
         if (self.token_value == terminal):
             self.token_pos += 1
-            self.current_token = self.tokens[0]
+            self.current_token = self.tokens[self.token_pos]
             self.token_value = self.get_token_value()
         else:
             self.error()
@@ -46,14 +50,14 @@ class Parser:
     def match_id(self):
         if (self.current_token[0] == "id"):
             self.token_pos += 1
-            self.current_token = self.tokens[0]
+            self.current_token = self.tokens[self.token_pos]
             self.token_value = self.get_token_value()
         else:
             self.error()
     def match_num(self):
         if (self.current_token[0] == "num"):
             self.token_pos += 1
-            self.current_token = self.tokens[0]
+            self.current_token = self.tokens[self.token_pos]
             self.token_value = self.get_token_value()
         else:
             self.error()
@@ -187,6 +191,7 @@ class Parser:
         if (self.check_id() or self.token_value == "{" or self.token_value == "if" or self.token_value == "while"
              or self.token_value == "return" or self.token_value == "input" or self.token_value == "output" ):
             self.statement()
+            self.statement_list_prime()
         elif (self.token_value == "}"):
             return
         else:
@@ -195,8 +200,11 @@ class Parser:
     def statement(self):
         if (self.check_id()):
             self.var()
-            self.match("=")
-            self.expression()
+            if(self.call_flag == False):
+                self.match("=")
+                self.expression()
+            else:
+                self.call_flag = False
             self.match(";")
         elif (self.token_value == "{"):
             self.compound_stmt()
@@ -260,6 +268,7 @@ class Parser:
         self.match_id()
         if(self.token_value == "("):
             #call
+            self.call_flag = True
             self.match("(")
             self.args()
             self.match(")")
@@ -275,7 +284,7 @@ class Parser:
             or self.token_value == "-" or self.token_value == "<=" or self.token_value == "<"
             or self.token_value == ">" or self.token_value == ">=" or self.token_value == "=="
             or self.token_value == "!=" or self.token_value == ";" or self.token_value == ")"
-            or self.token_value == ","):
+            or self.token_value == "," or self.token_value == "="  or self.token_value == "]"):
             return
         else:
             self.error()
@@ -323,7 +332,7 @@ class Parser:
         elif(self.token_value == "<=" or self.token_value == "<"
             or self.token_value == ">" or self.token_value == ">=" or self.token_value == "=="
             or self.token_value == "!=" or self.token_value == ";" or self.token_value == ")"
-            or self.token_value == ","):
+            or self.token_value == ","  or self.token_value == "]"):
             return
         else:
             self.error()
@@ -349,7 +358,7 @@ class Parser:
             or self.token_value == "-" or self.token_value == "<=" or self.token_value == "<"
             or self.token_value == ">" or self.token_value == ">=" or self.token_value == "=="
             or self.token_value == "!=" or self.token_value == ";" or self.token_value == ")"
-            or self.token_value == ","):
+            or self.token_value == ","  or self.token_value == "]"):
             return
         else:
             self.error()
