@@ -17,23 +17,24 @@ class Parser:
     def get_current_token(self):
         return self.token_value
 
-    def error(self):
-        print("IMPLEMENTAR ERROR BIEN")
+    def error(self, err_msg="SYNTAX ERROR"):
+        print(err_msg)
+        print("Error in the following token sequence" + self.get_token_value(self.tokens[self.token_pos-1]) + " -> " + self.token_value)
         exit()
 
-    def get_token_value(self):
+    def get_token_value(self, token):
         value = ""
-        if (self.current_token[0] == "res"):
-            value = self.res_list[self.current_token[1]]
-        elif (self.current_token[0] == "del"):
-            if(self.current_token[1] == "$"):
+        if (token[0] == "res"):
+            value = self.res_list[token[1]]
+        elif (token[0] == "del"):
+            if(token[1] == "$"):
                 value = "$"
             else:
-                value = self.del_list[self.current_token[1]]
-        elif (self.current_token[0] == "id"):
-            value = self.ids[self.current_token[1]]
-        elif (self.current_token[0] == "num"):
-            value = self.nums[self.current_token[1]]
+                value = self.del_list[token[1]]
+        elif (token[0] == "id"):
+            value = self.ids[token[1]]
+        elif (token[0] == "num"):
+            value = self.nums[token[1]]
         else:
             print("UNRECOGNIZED TOKEN TYPE")
             exit()
@@ -43,24 +44,24 @@ class Parser:
         if (self.token_value == terminal):
             self.token_pos += 1
             self.current_token = self.tokens[self.token_pos]
-            self.token_value = self.get_token_value()
+            self.token_value = self.get_token_value(self.current_token)
         else:
-            self.error()
+            self.error("THE CURRENT TOKEN WAS NOT EXPECTED")
 
     def match_id(self):
         if (self.current_token[0] == "id"):
             self.token_pos += 1
             self.current_token = self.tokens[self.token_pos]
-            self.token_value = self.get_token_value()
+            self.token_value = self.get_token_value(self.current_token)
         else:
-            self.error()
+            self.error("THE CURRENT TOKEN WAS NOT EXPECTED")
     def match_num(self):
         if (self.current_token[0] == "num"):
             self.token_pos += 1
             self.current_token = self.tokens[self.token_pos]
-            self.token_value = self.get_token_value()
+            self.token_value = self.get_token_value(self.current_token)
         else:
-            self.error()
+            self.error("THE CURRENT TOKEN WAS NOT EXPECTED")
 
     def check_id(self):
         if (self.current_token[0] == "id"):
@@ -75,7 +76,7 @@ class Parser:
             return False
             
     def declaration_list(self):
-        self.token_value = self.get_token_value()
+        self.token_value = self.get_token_value(self.current_token)
         self.declaration()
         self.declaration_list_prime()
 
@@ -86,7 +87,7 @@ class Parser:
         elif(self.token_value == "$"):
             return
         else:
-            self.error()
+            self.error("THE DECLARATIONS WERE NOT CORRECTLY WRITTEN")
 
     def declaration(self):
         if (self.token_value == "int"):
@@ -94,7 +95,7 @@ class Parser:
         elif (self.token_value == "void"):
             self.fun_declaration()
         else:
-            self.error()
+            self.error("THE DECLARATION WERE NOT CORRECTLY WRITTEN")
     
     def var_declaration(self):
         self.match("int")
@@ -113,7 +114,7 @@ class Parser:
             self.match("]")
             self.match(";")
         else:
-            self.error()
+            self.error("VARIABLE DECLARATION HAS AN INCORRECT FORMAT")
     
     def fun_declaration(self):
         if (self.token_value == "("):
@@ -129,7 +130,7 @@ class Parser:
             self.match(")")
             self.compound_stmt()
         else:
-            self.error()
+            self.error("FUNCTION DECLARATION HAS AN INCORRECT FORMAT")
     
     def params(self):
         if (self.token_value == "int"):
@@ -137,7 +138,7 @@ class Parser:
         elif (self.token_value == "void"):
             self.match("void")
         else:
-            self.error()
+            self.error("UNRECOGNIZED PARAMETERS")
     
     def param_list(self):
         self.param()
@@ -151,7 +152,7 @@ class Parser:
         elif (self.token_value == ")"):
             return
         else:
-            self.error()
+            self.error("ONE OR MORE PARAMS HAVE AN INCORRECT FORMAT")
 
     def param(self):
         self.match("int")
@@ -165,7 +166,7 @@ class Parser:
         elif (self.token_value == "," or self.token_value == ")"):
             return
         else:
-            self.error()
+            self.error("THE PARAMETER HAS AN INCORRECT FORMAT")
     
     def compound_stmt(self):
         self.match("{")
@@ -181,7 +182,7 @@ class Parser:
              or self.token_value == "return" or self.token_value == "input" or self.token_value == "output" ):
             return
         else:
-            self.error()
+            self.error("LOCAL DECLARATION HAS AN INCORRECT FORMAT")
 
     def statement_list(self):
         self.statement()
@@ -195,7 +196,7 @@ class Parser:
         elif (self.token_value == "}"):
             return
         else:
-            self.error()
+            self.error("A STATEMENT HAS AN INCORRECT FORMAT")
     
     def statement(self):
         if (self.check_id()):
@@ -232,7 +233,7 @@ class Parser:
             self.match("output")
             self.output_stmt_prime()
         else:
-            self.error()
+            self.error("STATEMENT HAS AN INCORRECT FORMAT")
     
     def selection_stmt_else(self):
         if(self.token_value == "else"):
@@ -243,7 +244,7 @@ class Parser:
             or self.token_value == "}" or self.token_value == "else" ):
             return
         else:
-            self.error()
+            self.error("THE IF SELECTION HAS AN INCORRECT FORMAT")
     
     def return_stmt_prime(self):
         if self.token_value == ";":
@@ -252,7 +253,7 @@ class Parser:
             self.expression()
             self.match(";")
         else:
-            self.error()
+            self.error("THE RETURN METHOD HAS AN INCORRECT FORMAT")
     
     def output_stmt_prime(self):
         if self.check_id():
@@ -262,7 +263,7 @@ class Parser:
             self.expression()
             self.match(";")
         else:
-            self.error()
+            self.error("THE OUTPUT METHOD HAS AN INCORRECT FORMAT")
     
     def var(self):
         self.match_id()
@@ -287,7 +288,7 @@ class Parser:
             or self.token_value == "," or self.token_value == "="  or self.token_value == "]"):
             return
         else:
-            self.error()
+            self.error("VARIABLE HAS AN INCORRECT FORMAT")
     
     def expression(self):
         self.arithmetic_expression()
@@ -302,7 +303,7 @@ class Parser:
         elif(self.token_value == ";" or self.token_value == ")"):
             return
         else:
-            self.error()
+            self.error("EXPRESSION HAS AN INCORRECT FORMAT")
     
     def relop(self):
         if(self.token_value == "<="):
@@ -318,7 +319,7 @@ class Parser:
         elif(self.token_value == "!="):
             self.match("!=")
         else:
-            self.error()
+            self.error("COMPARATOR OPERATOR EXPECTED")
     
     def arithmetic_expression(self):
         self.term()
@@ -335,7 +336,7 @@ class Parser:
             or self.token_value == ","  or self.token_value == "]"):
             return
         else:
-            self.error()
+            self.error("ARITHMETIC OR LOGIC EXPRESSION HAS AN INCORRECT FORMAT")
         
     def addop(self):
         if(self.token_value == "+"):
@@ -343,7 +344,7 @@ class Parser:
         elif(self.token_value == "-"):
             self.match("-")
         else:
-            self.error()
+            self.error("PLUS OR MINUS OPERATOR EXPECTED")
     
     def term(self):
         self.factor()
@@ -361,7 +362,7 @@ class Parser:
             or self.token_value == ","  or self.token_value == "]"):
             return
         else:
-            self.error()
+            self.error("TERM HAS AN INCORRECT FORMAT")
     
     def mulop(self):
         if(self.token_value == "*"):
@@ -369,7 +370,7 @@ class Parser:
         elif(self.token_value == "/"):
             self.match("/")
         else:
-            self.error()
+            self.error("MULTIPLICATION OR DIVISION OPERATOR EXPECTED")
     
     def factor(self):
         if(self.token_value == "("):
@@ -381,7 +382,7 @@ class Parser:
         elif(self.check_num()):
             self.match_num()
         else:
-            self.error()
+            self.error("FACTOR HAS AN INCORRECT FORMAT")
 
     def args(self):
         if(self.token_value == "(" or self.check_id() or self.check_num()):
@@ -389,7 +390,7 @@ class Parser:
         elif(self.token_value == ")"):
             return
         else:
-            self.error()
+            self.error("ARGUMENTS HAVE AN INCORRECT FORMAT")
 
     def args_list(self):
         self.arithmetic_expression()
@@ -403,7 +404,7 @@ class Parser:
         elif(self.token_value == ")"):
             return
         else:
-            self.error()         
+            self.error("COMA IS EXPECTED BETWEEN ARGUMENTS")         
 
 
 
