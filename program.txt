@@ -1,51 +1,35 @@
-/* A program to perform selection sort on a 10 
-element array */
+/* This is a program with no lexical errors and with all the tokens of the language. */
+
 int x[10];
-
-int miniloc(int a[], int low, int high){
-    int i; int x; int k;
+int a;
     
-    k = low;
-    x = a[low];
-    i = low + 1;
-    while (i < high){
-        if (a[i] < x){
-            x = a[i];
-            k = i;
-        }
-        i = i + 1;
+int fun(int b, int y[]){
+    b = 0;
+    while (b < 10){
+        y[b] = b;
+        b = b + 1;
     }
-    return k;
-}
-/* END of miniloc() */
-
-void sort(int a[], int low, int high){
-    int i; int k;
-    
-    i = low;
-    while (i < high -1){
-        int t;
-        k = minloc(a,I,high);
-        t = a[k];
-        a[k] = a[i];
-        a[i] = t;
-        i = i +1;
+    b = b * 2;
+    if (b == 10){
+        y[b] = 0;
+        y[b-1] = 0;
     }
-}
-/* END of sort() */
+    else{
+        y[0] = 0;
+        b = b / 2;
+    }
+    return b;
+}/* END of fun() */
 
 void main(void){
-    int i;
-    i = 0;
-    
-    while (i < 10){
-        input x[i];
-        i = i + 1;
-    }
-    sort(x,0,10);
-    i = 0;
-    while (i < 10){
-        output x[i];
-        i = i + 1;
-    }
-}/* END of main() */
+    input a;
+    output fun(a, x);
+    if (x[1] != 0)
+        output a;
+    if (x[2] > 10)
+        output x[2];
+    if (x[3] >= 11)
+        output x[3];
+    if (x[4] <= 9)
+        output x[4];
+}

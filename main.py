@@ -14,20 +14,23 @@ def main():
     n = scanner.get_nums()
     t = scanner.get_tokens()
 
-    # Parser Logic
-    parser = Parser(i, n, t)
-    parser.declaration_list()
-    print(parser.get_current_token())
-
     # print('Identifiers')
     # for x in range(len(i)):
     #     print(x, '|', i[x])
-    # print('\n', 'Numbers')
-    # for x in range(len(n)):
-    #     print(x, '|', n[x])    
+    print('\n', 'Numbers')
+    for x in range(len(n)):
+        print(x, '|', n[x])    
     # print('\n', 'Tokens')
     # for x in t:
     #     print(x)
+
+
+    # Parser Logic
+    parser = Parser(i, n, t)
+    parser.declaration_list()
+    if(parser.get_current_token() == "$"):
+        print("THE PROGRAM HAS NO SYNTAX ERRORS")
+
 
 if __name__ == '__main__':
     main()
